@@ -23,6 +23,8 @@ The canvas is fixed, full‑screen, and pointer‑events are disabled so the pag
 
 ### Random steps
 
+The gradient is $\\nabla f(x)$ and the norm is $\\|x\\|_2$.
+
 Let (\theta \sim \mathrm{Unif}[0,2\pi)). A random unit step is
 [ v = (\cos\theta,; \sin\theta). ]
 With step length (s), the next position is
