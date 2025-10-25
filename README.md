@@ -350,7 +350,3 @@ MIT
 ## Acknowledgments
 
 Inspired by classical Brownian motion visualizations and Daniel Shiffman’s p5.js community.
-
-```
-
----
