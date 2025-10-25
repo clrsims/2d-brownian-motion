@@ -1,5 +1,9 @@
+---
+
+````markdown
 # 2D Brownian Background (p5.js)
-Ambient, theme‑aware background animation that renders colorful 2D random walks (Brownian motion) behind your webpage content. It supports dark/light mode, responsive sizing, toroidal edge wrapping (no long cross‑screen lines), and adjustable trail persistence.
+
+Ambient, theme-aware background animation that renders colorful 2D random walks (Brownian motion) behind your webpage content. It supports dark/light mode, responsive sizing, toroidal edge wrapping (no long cross-screen lines), and adjustable trail persistence.
 
 > **Tech**: p5.js, HSLA colors, requestAnimationFrame via p5 draw loop, MutationObserver for theme sync.
 
@@ -7,15 +11,15 @@ Ambient, theme‑aware background animation that renders colorful 2D random walk
 
 ## Demo
 
-christophersims.net
+[https://christophersims.net](https://christophersims.net)
 
 ---
 
-## How it works (high‑level)
+## How it works (high-level)
 
-Each “walker” takes small random unit steps in the plane each frame. We draw short line segments between successive positions. A faint, opaque‑color rectangle is painted every frame to fade older lines, producing smooth, persistent trails. On load there’s a brief **outward burst** so the canvas fills more quickly.
+Each “walker” takes small random unit steps in the plane each frame. We draw short line segments between successive positions. A faint, opaque-color rectangle is painted every frame to fade older lines, producing smooth, persistent trails. On load there’s a brief **outward burst** so the canvas fills more quickly.
 
-The canvas is fixed, full‑screen, and pointer‑events are disabled so the page stays interactive.
+The canvas is fixed, full-screen, and pointer-events are disabled so the page stays interactive.
 
 ---
 
@@ -23,30 +27,60 @@ The canvas is fixed, full‑screen, and pointer‑events are disabled so the pag
 
 ### Random steps
 
-The gradient is $\\nabla f(x)$ and the norm is $\\|x\\|_2$.
+Let $\\theta \\sim \\mathrm{Unif}[0, 2\\pi)$.  
+A random unit step is:
 
-Let (\theta \sim \mathrm{Unif}[0,2\pi)). A random unit step is
-[ v = (\cos\theta,; \sin\theta). ]
-With step length (s), the next position is
-[ x_{t+1} = x_t + s,v_x, \qquad y_{t+1} = y_t + s,v_y. ]
+$$
+v = (\\cos\\theta,\\; \\sin\\theta)
+$$
+
+With step length $s$, the next position is:
+
+$$
+x_{t+1} = x_t + s\\,v_x, \\qquad y_{t+1} = y_t + s\\,v_y
+$$
+
+---
 
 ### Outward burst (vector blending)
 
-For the first `outwardBoostFrames`, we bias motion slightly away from the center (c). If (u_r) is the unit radial vector from center to the current point, we blend
-[ v' = \alpha,v + (1-\alpha),u_r, \quad \alpha=1-\texttt{outwardBoostStrength}, ]
-then renormalize (v') to unit length. This gently increases spatial coverage early without destroying randomness.
+For the first `outwardBoostFrames`, we bias motion slightly away from the center $c$.  
+If $u_r$ is the unit radial vector from center to the current point, we blend:
+
+$$
+v' = \\alpha v + (1 - \\alpha) u_r, \\quad \\alpha = 1 - \\text{outwardBoostStrength}
+$$
+
+Then renormalize $v'$ to unit length.  
+This gently increases spatial coverage early without destroying randomness.
+
+---
 
 ### Trail fading (exponential decay)
 
-Each frame we paint a full‑screen rectangle in the **current theme background color** with small alpha (a) (0–255). This multiplies previous pixel intensities by roughly (1- a/255) each frame → an exponential decay. The trail’s intensity half‑life (in frames) is approximately
-[ T_{1/2} \approx \frac{\ln 2}{-\ln(1-a/255)}. ]
-For `fadeAlphaLight = 5`, (T_{1/2}\approx 35) frames; for `fadeAlphaDark = 6`, (T_{1/2}\approx 29) frames.
+Each frame we paint a full-screen rectangle in the **current theme background color** with small alpha $a$ (0–255).  
+This multiplies previous pixel intensities by roughly $(1 - a/255)$ each frame → an exponential decay.  
+
+The trail’s intensity half-life (in frames) is approximately:
+
+$$
+T_{1/2} \\approx \\frac{\\ln 2}{-\\ln(1 - a/255)}
+$$
+
+For `fadeAlphaLight = 5`, $T_{1/2} \\approx 35$ frames;  
+for `fadeAlphaDark = 6`, $T_{1/2} \\approx 29$ frames.
+
+---
 
 ### Toroidal wrapping (no long lines)
 
 We wrap positions modulo the canvas dimensions to emulate a torus:
-[ x \leftarrow (x + W) \bmod W, \qquad y \leftarrow (y + H) \bmod H. ]
-Crucially, we check wrap **before** drawing and suppress the cross‑screen segment so there are no long diagonal lines.
+
+$$
+x \\leftarrow (x + W) \\bmod W, \\qquad y \\leftarrow (y + H) \\bmod H
+$$
+
+Crucially, we check wrap **before** drawing and suppress the cross-screen segment so there are no long diagonal lines.
 
 ---
 
@@ -58,7 +92,7 @@ Below is the code with commentary organized by section (the original script is a
 
 * **Single source of truth** for background RGB.
 * `solidRepaint(p5)`: clears the entire canvas to the current theme bg (opaque).
-* `fadeStep(p5, alphaDark, alphaLight)`: draws a translucent full‑screen rect for the exponential fade.
+* `fadeStep(p5, alphaDark, alphaLight)`: draws a translucent full-screen rect for the exponential fade.
 
 ```js
 const DARK_BG  = [26, 26, 26];   // AlphaDark
@@ -76,12 +110,12 @@ function fadeStep(p5, alphaDark, alphaLight){
   p5.fill(c[0], c[1], c[2], a);
   p5.rect(0, 0, p5.width, p5.height);
 }
-```
+````
 
 ### Configuration & state
 
-* `walkers`: path count (auto‑reduced on narrow screens).
-* `hopsPerFrame`: sub‑steps per animation frame for smoother motion.
+* `walkers`: path count (auto-reduced on narrow screens).
+* `hopsPerFrame`: sub-steps per animation frame for smoother motion.
 * `lineAlpha`: HSLA opacity for path strokes.
 * `fadeAlphaLight/Dark`: lower → longer trails.
 * `outwardBoost*`: early spatial coverage.
@@ -134,7 +168,7 @@ function generate(){
 
 ### p5 sketch
 
-* Full‑screen, fixed canvas with `pointer-events: none`.
+* Full-screen, fixed canvas with `pointer-events: none`.
 * `pixelDensity(1.5)` balances crispness/perf (tune for your targets).
 * `recomputeStep()` scales step size with min dimension so motion reads similarly on phones and desktops.
 
@@ -173,7 +207,7 @@ window._p5bg = new p5((s)=>{
 
 1. **Fade pass** using current theme.
 2. **Motion**: for each walker, do `hopsPerFrame` random steps, with optional outward boost.
-3. **Wrapping**: apply modulo logic **before** drawing; skip the cross‑screen segment when wrapping.
+3. **Wrapping**: apply modulo logic **before** drawing; skip the cross-screen segment when wrapping.
 4. **Watermark**: tiny label.
 
 ```js
@@ -260,9 +294,9 @@ new MutationObserver(()=>{
 
 | Key                    | Meaning                      | Typical values | Notes                              |
 | ---------------------- | ---------------------------- | -------------: | ---------------------------------- |
-| `walkers`              | Number of paths              |        100–400 | Auto‑reduced on very small screens |
+| `walkers`              | Number of paths              |        100–400 | Auto-reduced on very small screens |
 | `stepPxBase`           | Base step size (px)          |          1.5–3 | Scaled by canvas size              |
-| `hopsPerFrame`         | Sub‑steps per frame          |            1–5 | Higher = smoother but costlier     |
+| `hopsPerFrame`         | Sub-steps per frame          |            1–5 | Higher = smoother but costlier     |
 | `strokeW`              | Line thickness               |            1–3 | Aesthetic                          |
 | `lineAlpha`            | Stroke opacity (0–1)         |        0.4–0.9 | HSLA alpha for line color          |
 | `fadeAlphaLight/Dark`  | Fade rectangle alpha (0–255) |           3–10 | Lower → longer trails              |
@@ -270,11 +304,11 @@ new MutationObserver(()=>{
 | `outwardBoostStrength` | Blend toward radial (0–1)    |        0.1–0.4 | 0 = no bias                        |
 | `fps`                  | Target frame rate            |          60–90 | p5 tries to honor this             |
 
-**Trail half‑life cheat sheet** (approx):
+**Trail half-life cheat sheet (approx):**
 
-* alpha=4 → T½≈44 frames
-* alpha=5 → T½≈35 frames
-* alpha=6 → T½≈29 frames
+* α = 4 → T½ ≈ 44 frames
+* α = 5 → T½ ≈ 35 frames
+* α = 6 → T½ ≈ 29 frames
 
 ---
 
@@ -283,7 +317,7 @@ new MutationObserver(()=>{
 * Lower `walkers` and/or `hopsPerFrame` on mobile.
 * Prefer `strokeCap(ROUND)` to keep thin lines visually smooth.
 * If CPU bound, reduce `fps` or `pixelDensity()`.
-* Avoid huge canvases inside iframes; the sketch is full‑screen already.
+* Avoid huge canvases inside iframes; the sketch is full-screen already.
 
 ---
 
@@ -298,9 +332,15 @@ new MutationObserver(()=>{
 
 ## Troubleshooting
 
-* **Background looks darker on first load than after toggling**: Ensure you call `solidRepaint` on setup and after `windowResized`, and that your theme toggle mutates `body.classList` (the `MutationObserver` depends on this). Also verify your CSS doesn’t overlay additional translucent layers.
-* **No canvas / canvas covers content**: The sketch sets `z-index:-1` and `pointer-events:none`. Check parent stacking contexts and any positioned ancestors.
-* **Jagged lines on high‑DPI screens**: increase `pixelDensity` or lower `strokeW`.
+* **Background looks darker on first load than after toggling:**
+  Ensure you call `solidRepaint` on setup and after `windowResized`, and that your theme toggle mutates `body.classList` (the `MutationObserver` depends on this).
+  Also verify your CSS doesn’t overlay additional translucent layers.
+
+* **No canvas / canvas covers content:**
+  The sketch sets `z-index:-1` and `pointer-events:none`. Check parent stacking contexts and positioned ancestors.
+
+* **Jagged lines on high-DPI screens:**
+  Increase `pixelDensity` or lower `strokeW`.
 
 ---
 
@@ -313,3 +353,7 @@ MIT
 ## Acknowledgments
 
 Inspired by classical Brownian motion visualizations and Daniel Shiffman’s p5.js community.
+
+```
+
+---
