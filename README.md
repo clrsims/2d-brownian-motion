@@ -7,7 +7,7 @@ Ambient, theme‑aware background animation that renders colorful 2D random walk
 
 ## Demo
 
-![Demo of 2D Brownian background](assets/demo.gif)
+![Demo of 2D Brownian background](assets/demo.mp4)
 
 ---
 
