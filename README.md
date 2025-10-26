@@ -21,11 +21,11 @@ This process is also known as the **Wiener process**. It underlies diffusion, he
 
 ### Discrete approximation
 The visualization implements a 2D **random walk**, a discrete approximation of Brownian motion:
-$$
-\[
+
+$\[
 x_{t+1} = x_t + s v_x, \qquad y_{t+1} = y_t + s v_y
-\]
-$$
+\]$
+
 Each step chooses a random direction $\( \theta \sim \mathrm{Unif}[0, 2\pi) \)$ and moves a small distance $\(s\)$.  
 As $\(s \to 0\)$ and frame rate increases, this converges to continuous Brownian motion.
 
