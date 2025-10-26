@@ -6,6 +6,37 @@ Ambient, theme-aware background animation that renders colorful 2D random walks 
 
 ---
 
+## What is Brownian Motion?
+
+Brownian motion is the mathematical and physical concept behind this visualization. It describes the **random continuous motion of particles** suspended in a fluid, such as pollen grains moving in water, caused by countless tiny collisions with surrounding molecules.
+
+### Mathematical model
+Brownian motion is modeled as a continuous random process \(B(t)\) satisfying:
+1. \(B(0) = 0\)
+2. \(B(t) - B(s) \sim \mathcal{N}(0, t-s)\) for \(t > s\)
+3. Independent increments
+4. Continuous, nowhere-differentiable paths
+
+This process is also known as the **Wiener process**. It underlies diffusion, heat flow, and stochastic calculus.
+
+### Discrete approximation
+The visualization implements a 2D **random walk**, a discrete approximation of Brownian motion:
+
+\[
+x_{t+1} = x_t + s v_x, \qquad y_{t+1} = y_t + s v_y
+\]
+
+Each step chooses a random direction \( \theta \sim \mathrm{Unif}[0, 2\pi) \) and moves a small distance \(s\).  
+As \(s \to 0\) and frame rate increases, this converges to continuous Brownian motion.
+
+### Applications
+- **Physics:** particle diffusion, thermal motion  
+- **Finance:** stock price modeling (geometric Brownian motion in Black–Scholes)  
+- **Mathematics:** foundation of stochastic calculus and probability theory  
+- **Biology:** intracellular molecular transport  
+
+Brownian motion is **randomness with structure**—it’s continuous, self-similar, and Gaussian.  
+
 ## Demo
 
 [https://christophersims.net](https://christophersims.net)
