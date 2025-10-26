@@ -35,8 +35,6 @@ As $\(s \to 0\)$ and frame rate increases, this converges to continuous Brownian
 - **Mathematics:** foundation of stochastic calculus and probability theory  
 - **Biology:** intracellular molecular transport  
 
-Brownian motion is **randomness with structure**—it’s continuous, self-similar, and Gaussian.  
-
 ## Demo
 
 [https://christophersims.net](https://christophersims.net)
